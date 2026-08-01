@@ -390,19 +390,6 @@ erDiagram
 
 ---
 
-## 💬 Interview Q&A (Based on this Project)
-
-### Q1: Why did you choose a Star Schema model over a flat denormalized table in the Gold Layer?
-> **Answer**: Flat denormalized tables lead to massive data redundancy and poor performance when querying aggregated metrics across multiple slices (like sales by customer segment, or count by shipping mode). By splitting the data into dimensions and a central fact table, we minimize storage overhead, simplify BI integration (as tools like Power BI are optimized for Star schemas), and accelerate aggregate query performance using Spark's partition pruning.
-
-### Q2: How does Delta Lake help you ensure data quality compared to writing directly to Parquet files?
-> **Answer**: Delta Lake provides ACID transactions and Schema Enforcement. If a Spark job fails halfway while writing to raw Parquet, the files are left in a corrupted state. Delta Lake's transaction log prevents this by ensuring writes either succeed completely or roll back. Additionally, schema enforcement blocks writes if a new field or modified datatype is introduced unexpectedly, shielding downstream reports from silent corruption.
-
-### Q3: How did you handle duplicate data in your pipeline?
-> **Answer**: I evaluated duplicate rates at two phases. In the Bronze stage, I did an exploratory count of duplicate entries. In the Silver notebook, I audited the unique identifier, `order_item_id`. I computed distinct row counts against total row counts; if the difference was greater than zero, the notebook raised an exception to stop execution. In production, we can use a `.dropDuplicates(["order_item_id"])` operation or execute `MERGE INTO` SQL commands to upsert new data without generating duplicates.
-
----
-
 ## 📄 Resume Project Bullet Points
 
 - **Supply Chain Control Tower Pipeline | Databricks, PySpark, Delta Lake, Unity Catalog**

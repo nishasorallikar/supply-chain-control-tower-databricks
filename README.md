@@ -91,25 +91,15 @@ The pipeline processes a comprehensive Supply Chain dataset containing transacti
 
 ## 📂 Folder Structure
 
-The project code is organized as follows:
+The project directory structure is organized as follows:
 
 ```directory
 supply-chain-control-tower-databricks/
-├── .github/
-│   └── workflows/
-│       └── databricks_ci_cd.yml       # CI/CD Deployment pipeline
-├── notebooks/
-│   ├── 01_bronze_ingestion.py         # PySpark Notebook for CSV Ingestion to Bronze Delta
-│   ├── 02_silver_transformation.py    # PySpark Notebook for Data Cleaning & Silver Delta
-│   └── 03_gold_modeling.py            # PySpark/SQL Notebook for Star Schema & Gold Layer
-├── schemas/
-│   ├── bronze_schema.py               # Predefined schema definitions for Ingestion
-│   └── gold_schema.sql                # SQL DDL Scripts for dimensional tables
-├── data/
-│   └── supply_chain_sample.csv        # Small sample dataset for local testing
-├── README.md                          # Project documentation
-└── LICENSE                            # License details
+├── assets/
+│   └── medallion_architecture_diagram.png  # Custom Medallion Architecture diagram
+└── README.md                               # Project documentation
 ```
+
 
 
 ---

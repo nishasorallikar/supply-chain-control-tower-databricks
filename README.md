@@ -257,10 +257,10 @@ The following diagram illustrates the flow of data through the Medallion Archite
 
 ```mermaid
 graph TD
-    classDef source fill:#F5F5F7,stroke:#333,stroke-width:1.5px,color:#000;
-    classDef bronze fill:#CD7F32,stroke:#333,stroke-width:1.5px,color:#fff;
-    classDef silver fill:#C0C0C0,stroke:#333,stroke-width:1.5px,color:#000;
-    classDef gold fill:#FFD700,stroke:#333,stroke-width:1.5px,color:#000;
+    classDef source fill:#ffffff,stroke:#333333,stroke-width:2px,color:#333333;
+    classDef bronze fill:#e07a1b,stroke:#a6530b,stroke-width:2px,color:#ffffff;
+    classDef silver fill:#777e82,stroke:#4f5558,stroke-width:2px,color:#ffffff;
+    classDef gold fill:#df9e04,stroke:#9b6c02,stroke-width:2px,color:#ffffff;
 
     CSV[Raw CSV File]:::source --> B[Bronze Layer <br> bronze_supply_chain]:::bronze
     B --> S[Silver Layer <br> silver_supply_chain]:::silver

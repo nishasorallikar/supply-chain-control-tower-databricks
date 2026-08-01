@@ -107,7 +107,6 @@ supply-chain-control-tower-databricks/
 │
 ├── assets/
 │   ├── medallion_architecture.png
-│   ├── star_schema.png
 │   ├── project_workflow.png
 │   ├── bronze_layer.png
 │   ├── silver_layer.png
@@ -282,9 +281,7 @@ graph TD
 
 ## 📈 Star Schema Diagram
 
-The entity relationships inside the Gold Layer are structured as a Star Schema:
-
-![Star Schema Diagram](assets/star_schema.png)
+The entity relationships inside the Gold Layer are structured as a Star Schema. For a detailed breakdown of the fact and dimension table schemas, see the [Star Schema Specifications](assets/star_schema_explanation.md).
 
 ---
 

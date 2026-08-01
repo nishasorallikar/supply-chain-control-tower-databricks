@@ -2,8 +2,6 @@
 
 To enable high-performance BI queries, aggregations, and business intelligence reporting, the Gold Layer is modeled into a clean, optimized **Star Schema**. This architectural pattern decouples transactional facts from descriptive dimensions, ensuring fast joins and query-performance optimizations (such as partition pruning).
 
-![Star Schema Diagram](star_schema.png)
-
 ### 📊 Schema Components & Table Specifications
 
 The database model is structured around a central **Fact Table** surrounded by four descriptive **Dimension Tables**:

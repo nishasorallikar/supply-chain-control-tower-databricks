@@ -280,68 +280,11 @@ graph TD
 
 ---
 
-## 📈 Star Schema Diagram (Mermaid)
+## 📈 Star Schema Diagram
 
 The entity relationships inside the Gold Layer are structured as a Star Schema:
 
-```mermaid
-erDiagram
-    fact_orders {
-        bigint order_item_id PK
-        bigint order_id
-        bigint customer_id FK
-        bigint product_card_id FK
-        date order_date FK
-        string shipping_mode FK
-        string delivery_status FK
-        double sales
-        int order_item_quantity
-        double order_item_total
-        double order_item_discount
-        double order_item_discount_rate
-        double order_profit_per_order
-        double benefit_per_order
-        int days_for_shipping_real
-        int days_for_shipment_scheduled
-        int late_delivery_risk
-    }
-    dim_customer {
-        bigint customer_id PK
-        string customer_fname
-        string customer_lname
-        string customer_city
-        string customer_state
-        string customer_country
-        string customer_zipcode
-        string customer_segment
-    }
-    dim_product {
-        bigint product_card_id PK
-        bigint product_category_id
-        string product_name
-        double product_price
-        string category_name
-        string department_name
-    }
-    dim_date {
-        date date PK
-        int year
-        int quarter
-        int month
-        string month_name
-        int day
-        string day_name
-    }
-    dim_shipping {
-        string shipping_mode PK
-        string delivery_status PK
-    }
-
-    fact_orders }o--|| dim_customer : "customer_id"
-    fact_orders }o--|| dim_product : "product_card_id"
-    fact_orders }o--|| dim_date : "order_date"
-    fact_orders }o--|| dim_shipping : "shipping_mode, delivery_status"
-```
+![Star Schema Diagram](assets/star_schema.png)
 
 ---
 

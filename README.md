@@ -89,7 +89,27 @@ To deliver high-quality, reliable data for business operations, we implement the
 2. **Silver Layer (Enriched & Validated)**: The clean-room zone. Data is cleansed, column names are standardized, dates are converted to timestamps, and data validation rules are applied.
 3. **Gold Layer (Analytical Star Schema)**: The business-ready zone. Data is modeled into dimensional and fact tables designed for analytics, reporting, and machine learning.
 
+### ⚙️ Medallion Layer Specifications
 
+Below are the technical specifications, load methods, and data models applied to each layer of the architecture:
+
+#### 🟫 Bronze Layer (Raw Ingestion)
+- **Object Type**: Delta Table (`bronze_supply_chain`)
+- **Load Method**: Batch Processing (Full Load / Truncate & Insert)
+- **Transformations**: None (Ingested directly from CSV with standardized lowercase snake_case column names)
+- **Data Model**: None (As-is source structure)
+
+#### ⬜ Silver Layer (Cleaned & Standardized)
+- **Object Type**: Delta Table (`silver_supply_chain`)
+- **Load Method**: Batch Processing (Full Load / Truncate & Insert)
+- **Transformations**: Data Cleansing, Data Standardization (Date-to-Timestamp casting), Data Normalization, Column Pruning, and Data Validation assertions
+- **Data Model**: Cleaned, verified, and standardized transactional records
+
+#### 🟨 Gold Layer (Business Ready Data)
+- **Object Type**: Delta Tables / Views
+- **Load Method**: Direct read / Query on-demand
+- **Transformations**: Data Integrations, Aggregations, and Business Logic
+- **Data Model**: Star Schema (comprising `dim_customer`, `dim_product`, `dim_date`, `dim_shipping`, and `fact_orders`)
 
 ---
 

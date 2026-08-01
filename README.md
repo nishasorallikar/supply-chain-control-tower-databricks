@@ -83,15 +83,6 @@ supply-chain-control-tower-databricks/
 
 To deliver high-quality, reliable data for business operations, we implement the **Medallion Architecture**:
 
-```
- ┌──────────────────────┐      ┌──────────────────────┐      ┌──────────────────────┐
- │     BRONZE LAYER     │ ───> │     SILVER LAYER     │ ───> │      GOLD LAYER      │
- │  - Raw Ingestion     │      │  - Cleaning          │      │  - Business Logic    │
- │  - Delta Table       │      │  - Schema Casts      │      │  - Dimensional Model │
- │  - Append-Only       │      │  - Data Quality      │      │  - Star Schema BI    │
- └──────────────────────┘      └──────────────────────┘      └──────────────────────┘
-```
-
 ![Medallion Architecture Diagram](assets/medallion_architecture_diagram.png)
 
 1. **Bronze Layer (Raw Ingestion)**: Acts as the landing zone. It stores raw data exactly as received from source systems without modification. This preserves history and allows reprocessing if logic changes.

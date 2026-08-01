@@ -84,33 +84,20 @@ supply-chain-control-tower-databricks/
 To deliver high-quality, reliable data for business operations, we implement the **Medallion Architecture**:
 
 ```
- ┌──────────────────────────┐      ┌──────────────────────────┐      ┌──────────────────────────┐
- │       BRONZE LAYER       │ ───> │       SILVER LAYER       │ ───> │        GOLD LAYER        │
- │       (Raw Data)         │      │ (Cleaned & Standardized) │      │  (Business Ready Data)   │
- ├──────────────────────────┤      ├──────────────────────────┤      ├──────────────────────────┤
- │ • Object Type: Table     │      │ • Object Type: Table     │      │ • Object Type: Table/View│
- │ • Load: Batch/Full Load  │      │ • Load: Batch/Full Load  │      │ • Load: Query on Demand  │
- │ • Transforms: None       │      │ • Transforms: Cleansing, │      │ • Transforms: Integrations│
- │                          │      │   Standardization, etc.  │      │   & Aggregations         │
- │ • Model: None (As-Is)    │      │ • Model: None (As-Is)    │      │ • Model: Star Schema     │
- └──────────────────────────┘      └──────────────────────────┘      └──────────────────────────┘
+ ┌──────────────────────┐      ┌──────────────────────┐      ┌──────────────────────┐
+ │     BRONZE LAYER     │ ───> │     SILVER LAYER     │ ───> │      GOLD LAYER      │
+ │  - Raw Ingestion     │      │  - Cleaning          │      │  - Business Logic    │
+ │  - Delta Table       │      │  - Schema Casts      │      │  - Dimensional Model │
+ │  - Append-Only       │      │  - Data Quality      │      │  - Star Schema BI    │
+ └──────────────────────┘      └──────────────────────┘      └──────────────────────┘
 ```
 
-1. **Bronze Layer (Raw Data)**:
-   - **Object Type**: Delta Table
-   - **Load Method**: Batch Processing (Full Load / Truncate & Insert)
-   - **Transformations**: None (Ingested directly from CSV raw file)
-   - **Data Model**: None (As-is source structure)
-2. **Silver Layer (Cleaned & Standardized)**:
-   - **Object Type**: Delta Table
-   - **Load Method**: Batch Processing (Full Load / Truncate & Insert)
-   - **Transformations**: Data Cleansing, Data Standardization, Data Normalization, Derived Columns, and Data Enrichment
-   - **Data Model**: None (As-is unified schema)
-3. **Gold Layer (Business Ready Data)**:
-   - **Object Type**: Delta Tables / Views
-   - **Load Method**: No Load (Query on-demand / Direct read)
-   - **Transformations**: Data Integrations, Aggregations, and Business Logic
-   - **Data Model**: Star Schema (comprising `dim_customer`, `dim_product`, `dim_date`, `dim_shipping`, and `fact_orders`), Flat Tables, and Aggregated Tables
+![Medallion Architecture Diagram](assets/medallion_architecture_diagram.png)
+
+1. **Bronze Layer (Raw Ingestion)**: Acts as the landing zone. It stores raw data exactly as received from source systems without modification. This preserves history and allows reprocessing if logic changes.
+2. **Silver Layer (Enriched & Validated)**: The clean-room zone. Data is cleansed, column names are standardized, dates are converted to timestamps, and data validation rules are applied.
+3. **Gold Layer (Analytical Star Schema)**: The business-ready zone. Data is modeled into dimensional and fact tables designed for analytics, reporting, and machine learning.
+
 
 
 ---

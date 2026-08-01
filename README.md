@@ -370,15 +370,6 @@ erDiagram
 
 ---
 
-## 🔮 Future Improvements
-
-- [ ] **Streaming Ingestion**: Convert ingestion notebooks to use **Databricks Auto Loader** (`readStream`) for automatic, incremental data detection as soon as new files hit the Volume.
-- [ ] **Data Quality Framework**: Transition manual audits to **Delta Live Tables (DLT)** using Expectation declarations to gracefully quarantine bad records.
-- [ ] **Orchestration**: Configure **Databricks Workflows** to manage notebook executions, schedule cron tasks, and send automated email alerts on failures.
-- [ ] **BI Dashboard Integration**: Provision a Databricks SQL Serverless Warehouse to host live visualizations displaying delivery delay risks and sales indicators.
-
----
-
 ## 🏁 How to Run the Project
 
 ### Prerequisites
@@ -400,35 +391,6 @@ erDiagram
    Execute the `02_silver_transformation.py` notebook. This applies type casts, audits columns, and saves `silver_supply_chain`.
 6. **Run Modeling**:
    Execute the `03_gold_modeling.py` notebook. This splits data into the star schema tables (`dim_customer`, `dim_product`, `dim_date`, `dim_shipping`, and `fact_orders`).
-
----
-
-## 🖼️ Project Screenshots
-
-*Here you can insert visual proofs of your pipeline run in Databricks:*
-
-#### 1. Databricks Workflow Graph
-![Databricks Workflow](https://via.placeholder.com/800x400.png?text=Databricks+Workflow+Job+Run+Success)
-*Placeholder: Screenshot of the Databricks Jobs UI showing clean, green successful notebook runs.*
-
-#### 2. Unity Catalog Schema Explorer
-![Unity Catalog Explorer](https://via.placeholder.com/800x400.png?text=Unity+Catalog+Tables+Structure)
-*Placeholder: Screenshot of Databricks Catalog Explorer displaying Gold dimensions and fact tables.*
-
-#### 3. Power BI / Databricks SQL Dashboard
-![Control Tower Dashboard](https://via.placeholder.com/800x400.png?text=Supply+Chain+Control+Tower+Dashboard)
-*Placeholder: Visualizing Late Delivery Risk and Product Performance.*
-
----
-
-## 📄 Resume Project Bullet Points
-
-- **Supply Chain Control Tower Pipeline | Databricks, PySpark, Delta Lake, Unity Catalog**
-  - Engineered an end-to-end Medallion Architecture pipeline to ingest and process **180,000+** supply chain transactional records.
-  - Implemented schema standardization and type-casting rules in **PySpark (Spark SQL)**, transforming raw multi-format CSV files into standard **Delta tables**.
-  - Modeled an optimized **Star Schema** (comprising 4 dimensions and a central fact table) to support operational supply chain metrics such as late delivery risk and profit margins.
-  - Set up programmatic data quality checks (null detection, range validations, and uniqueness constraints) preventing downstream pipeline failures.
-  - Leveraged **Unity Catalog** to enforce data governance, directory volumes, and table access controls in a secure Databricks environment.
 
 ---
 

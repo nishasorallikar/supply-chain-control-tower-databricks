@@ -14,7 +14,7 @@ An end-to-end modern Data Engineering pipeline demonstrating a **Supply Chain Co
 
 To deliver high-quality, reliable data for business operations, we implement the **Medallion Architecture**:
 
-![Medallion Architecture Diagram](assets/medallion_architecture_diagram.png)
+![Medallion Architecture Diagram](assets/medallion_architecture.png)
 
 1. **Bronze Layer (Raw Ingestion)**: Acts as the landing zone. It stores raw data exactly as received from source systems without modification. This preserves history and allows reprocessing if logic changes.
 2. **Silver Layer (Enriched & Validated)**: The clean-room zone. Data is cleansed, column names are standardized, dates are converted to timestamps, and data validation rules are applied.
@@ -95,10 +95,35 @@ The project directory structure is organized as follows:
 
 ```directory
 supply-chain-control-tower-databricks/
+│
+├── .github/
+│   └── workflows/
+│       └── databricks_ci_cd.yml
+│
+├── notebooks/
+│   ├── 01_bronze_data_ingestion.py
+│   ├── 02_silver_layer.py
+│   └── 03_gold_layer.py
+│
 ├── assets/
-│   └── medallion_architecture_diagram.png  # Custom Medallion Architecture diagram
-└── README.md                               # Project documentation
+│   ├── medallion_architecture.png
+│   ├── star_schema.png
+│   ├── project_workflow.png
+│   ├── bronze_layer.png
+│   ├── silver_layer.png
+│   ├── gold_layer.png
+│   ├── databricks_tables.png
+│   └── powerbi_dashboard.png
+│
+├── data/
+│   └── supply_chain_sample.csv
+│
+├── README.md
+├── LICENSE
+├── .gitignore
+└── requirements.txt
 ```
+
 
 
 

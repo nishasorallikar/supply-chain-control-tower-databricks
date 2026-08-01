@@ -1,149 +1,257 @@
 # 📊 Supply Chain Control Tower using Databricks
-
 [![Databricks](https://img.shields.io/badge/Databricks-FF3621?style=for-the-badge&logo=databricks&logoColor=white)](https://databricks.com/)
-[![Apache Spark](https://img.shields.io/badge/PySpark-E25A1C?style=for-the-badge&logo=apachespark&logoColor=white)](https://spark.apache.org/)
+[![Apache Spark](https://img.shields.io/badge/Apache_Spark-E25A1C?style=for-the-badge&logo=apachespark&logoColor=white)](https://spark.apache.org/)
 [![Delta Lake](https://img.shields.io/badge/Delta_Lake-00ADF2?style=for-the-badge&logo=delta&logoColor=white)](https://delta.io/)
 [![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![SQL](https://img.shields.io/badge/SQL-4479A1?style=for-the-badge&logo=postgresql&logoColor=white)](https://en.wikipedia.org/wiki/SQL)
-[![Unity Catalog](https://img.shields.io/badge/Unity_Catalog-005B94?style=for-the-badge&logo=databricks&logoColor=white)](https://databricks.com/product/unity-catalog)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+
+An end-to-end modern Data Engineering pipeline demonstrating a **Supply Chain Control Tower** built on the **Databricks Lakehouse Platform**. The pipeline ingests raw supply chain transaction records, processes them through a multi-stage **Medallion Architecture** using **PySpark** and **Delta Lake**, and builds an optimized **Star Schema** managed under **Unity Catalog** for real-time visibility, operational analysis, and BI reporting.
 
 ---
 
-## 1. Project Overview
+## 🗺️ Project Overview
 
-This project implements an end-to-end Data Engineering pipeline for a **Supply Chain Control Tower** built on the **Databricks Lakehouse Platform**. 
+A **Supply Chain Control Tower** serves as a central dashboarding and analytics hub that provides end-to-end visibility across supply chain operations. 
 
-The pipeline ingests raw transactional supply chain data, processes it through a multi-stage **Medallion Architecture (Bronze, Silver, Gold)** using **PySpark** and **Delta Tables**, and models the data into a optimized **Star Schema** managed under **Unity Catalog**. The end goal is to clean and organize raw metrics into secure, query-ready tables designed for business intelligence, logistics tracking, and operational analysis.
+This project implements the underlying data pipeline for such a control tower. It automates the ingestion of raw transactional data, runs validation audits, builds unified entities, and constructs a robust dimensional model (Star Schema). The final tables are stored in **Delta Lake** format, combining the scale of a data lake with the reliability and performance of a relational data warehouse.
 
----
-
-## 2. Architecture
-
-The pipeline processes data sequentially across three analytical zones. The following flow diagram traces the lifecycle of the supply chain dataset:
-
-```mermaid
-graph TD
-    classDef bronze fill:#CD7F32,stroke:#333,stroke-width:2px,color:#fff;
-    classDef silver fill:#C0C0C0,stroke:#333,stroke-width:2px,color:#000;
-    classDef gold fill:#FFD700,stroke:#333,stroke-width:2px,color:#000;
-    classDef source fill:#F5F5F7,stroke:#333,stroke-dasharray: 5 5,stroke-width:2px,color:#000;
-
-    CSV[Raw CSV Ingestion Volume]:::source -->|Ingest & Profile| B[Bronze Table: bronze_supply_chain]:::bronze
-    B -->|Clean, Cast & Validate| S[Silver Table: silver_supply_chain]:::silver
-    
-    S -->|Select Distinct| D1[dim_customer]:::gold
-    S -->|Select Distinct| D2[dim_product]:::gold
-    S -->|Select Distinct| D3[dim_date]:::gold
-    S -->|Select Distinct| D4[dim_shipping]:::gold
-    S -->|Select Measures & FKs| F1[fact_orders]:::gold
+```
+Raw CSV (UC Volume) ──> Bronze (Raw Ingestion) ──> Silver (Enriched & Validated) ──> Gold (Star Schema BI Layer)
 ```
 
 ---
 
-## 3. Technology Stack
+## 🎯 Project Objectives
 
-| Technology | Purpose in Project |
-| :--- | :--- |
-| **Databricks** | Unified environment for notebooks, clusters, and runtimes |
-| **PySpark** | Distributed processing engine for transformations at scale |
-| **Python** | DataFrame API operations, cleaning syntax, and data validation rules |
-| **SQL** | Dimensional table creation, database catalog structures, and auditing |
-| **Delta Lake** | ACID transactions, time travel, schema enforcement, and fast performance |
-| **Unity Catalog** | Centralized data governance, storage volumes, schemas, and tables |
-| **Delta Tables** | Format for all processing layers (Bronze, Silver, Gold) |
+- **Automated Ingestion**: Seamlessly ingest raw transactional CSV data from Databricks Unity Catalog Volumes.
+- **ACID Transactions & Schema Enforcement**: Utilize Delta Lake features to ensure data integrity and track historical updates.
+- **Medallion Architecture**: Implement a structured multi-layer approach (Bronze, Silver, Gold) to isolate processing concerns.
+- **Enterprise Governance**: Govern all datasets (Catalogs, Schemas, Tables, Volumes) using **Unity Catalog**.
+- **Analytical Optimization**: Model data into a high-performance **Star Schema** consisting of dimensions and a fact table, reducing join complexity for downstream BI dashboards.
+- **Quality Assurance**: Implement automated data quality checks and validation metrics at each transformation stage.
 
 ---
 
-## 4. Dataset Overview
+## 🛠️ Tech Stack & Architecture
 
-The dataset consists of historical supply chain transactions containing metrics for order management, customer shipping, product catalogs, and performance risks.
-- **Granularity**: Order item row level
-- **Scope**: Covers customer segments, shipping timelines, margins, profit rates, and delivery flags.
-- **Data Attributes**: Customer names, categories, addresses, product codes, unit prices, shipment dates, delivery categories, and financial indicators.
-
----
-
-## 5. Medallion Architecture
-
-We implement a three-tier **Medallion Architecture** to isolate logic stages and maintain data quality:
-
-1. 🟫 **Bronze Layer**: Raw storage layer. Preserves the original state of the incoming dataset without destructive updates.
-2. ⬜ **Silver Layer**: Cleaned, verified, and normalized storage layer. Casts data types, removes noise columns, and runs primary validation assertions.
-3. 🟨 **Gold Layer**: Analytical modeling layer. Organizes clean metrics into an optimized Star Schema (dimensions and facts) for fast aggregations and dashboards.
+| Technology | Logo / Badge | Version | Role in Project |
+| :--- | :---: | :---: | :--- |
+| **Databricks** | `Databricks` | DBR 14.3 LTS+ | Unified processing environment and Notebook orchestration |
+| **Apache Spark** | `PySpark` | 3.5.x | Parallelized distributed data processing engine |
+| **Delta Lake** | `Delta Lake` | 3.1.x | Storage layer supplying ACID transactions, time travel, and schema enforcement |
+| **Unity Catalog** | `Unity Catalog` | - | Centralized governance, cataloging, access control, and storage volume management |
+| **Python** | `Python` | 3.10+ | Primary language for PySpark APIs and ETL logic orchestration |
+| **SQL** | `SQL` | ANSI SQL | Analytical queries, dimension modeling, and BI view definition |
 
 ---
 
-## 6. Bronze Layer
+## 📊 Dataset Overview
 
-* **Data Ingestion**: Reads the raw CSV file directly from a secure **Unity Catalog Volume**.
-* **Schema Handling**: Dynamically infers the schema structure during loading.
-* **Data Profiling**: Analyzes initial columns, value ranges, and missing fields.
-* **Validation Rules**:
-  - Performs record count validation (checks total records imported).
-  - Validates duplicate record count.
-* **Formatting**: Converts headers into Delta-compatible strings by replacing spaces and brackets with underscores (e.g., `Product Card Id` $\rightarrow$ `product_card_id`).
-* **Output**: Writes the output to the Delta Table `bronze_supply_chain`.
+The pipeline processes a comprehensive Supply Chain dataset containing transaction logs, logistics updates, and order details. 
+- **Total Records**: `180,519`
+- **Granularity**: Order item level
+- **Key Attributes**: Customer details, Product catalog, Order dates, Shipment dates, Shipping modes, Delivery status, Sales, Discounts, and Profit margins.
 
 ---
 
-## 7. Silver Layer
+## 📂 Folder Structure
 
-* **Data Ingest**: Reads from the `bronze_supply_chain` Delta Table.
-* **Transformation Operations**:
-  - **Date Normalization**: Converts dates (`order_date` and `shipping_date`) from raw strings into uniform PySpark `Timestamp` values.
-  - **Column Pruning**: Drops unnecessary fields that do not serve business or operational KPIs.
-* **Data Cleaning**: Drops corrupted or null entries in key keys.
-* **Data Validation**:
-  - Asserts that all order item records remain unique.
-  - Verifies date limits and ranges are valid.
-  - Ensures order quantities are greater than zero.
-* **Output**: Writes clean data to the Delta Table `silver_supply_chain`.
+The project code is organized as follows:
+
+```directory
+supply-chain-control-tower-databricks/
+├── .github/
+│   └── workflows/
+│       └── databricks_ci_cd.yml       # CI/CD Deployment pipeline
+├── notebooks/
+│   ├── 01_bronze_ingestion.py         # PySpark Notebook for CSV Ingestion to Bronze Delta
+│   ├── 02_silver_transformation.py    # PySpark Notebook for Data Cleaning & Silver Delta
+│   └── 03_gold_modeling.py            # PySpark/SQL Notebook for Star Schema & Gold Layer
+├── schemas/
+│   ├── bronze_schema.py               # Predefined schema definitions for Ingestion
+│   └── gold_schema.sql                # SQL DDL Scripts for dimensional tables
+├── data/
+│   └── supply_chain_sample.csv        # Small sample dataset for local testing
+├── README.md                          # Project documentation
+└── LICENSE                            # License details
+```
 
 ---
 
-## 8. Gold Layer
+## 🏆 Medallion Architecture Explanation
 
-Data is modeled into a Star Schema. 
+To deliver high-quality, reliable data for business operations, we implement the **Medallion Architecture**:
 
-### Dimension Tables
+```
+ ┌──────────────────────┐      ┌──────────────────────┐      ┌──────────────────────┐
+ │     BRONZE LAYER     │ ───> │     SILVER LAYER     │ ───> │      GOLD LAYER      │
+ │  - Raw Ingestion     │      │  - Cleaning          │      │  - Business Logic    │
+ │  - Delta Table       │      │  - Schema Casts      │      │  - Dimensional Model │
+ │  - Append-Only       │      │  - Data Quality      │      │  - Star Schema BI    │
+ └──────────────────────┘      └──────────────────────┘      └──────────────────────┘
+```
+
+1. **Bronze Layer (Raw Ingestion)**: Acts as the landing zone. It stores raw data exactly as received from source systems without modification. This preserves history and allows reprocessing if logic changes.
+2. **Silver Layer (Enriched & Validated)**: The clean-room zone. Data is cleansed, column names are standardized, dates are converted to timestamps, and data validation rules are applied.
+3. **Gold Layer (Analytical Star Schema)**: The business-ready zone. Data is modeled into dimensional and fact tables designed for analytics, reporting, and machine learning.
+
+---
+
+## 🪵 Layer Deep Dives
+
+### 1. Bronze Layer (Ingestion)
+- **Source**: Ingests raw CSV files uploaded to `Unity Catalog Volumes`.
+- **Schema**: Infers or enforces schema programmatically during ingestion.
+- **Operations**:
+  - Validates total record counts.
+  - Detects duplicate records.
+  - Explores distributions (unique customers, products, orders).
+  - Standardizes column headers: Replaces spaces and special characters with underscores to make names compatible with Delta Lake (e.g., `Order Customer Id` $\rightarrow$ `order_customer_id`).
+- **Storage**: Saves the dataset as a Delta table named `bronze_supply_chain`.
+
+### 2. Silver Layer (Cleaning & Enrichment)
+- **Source**: Reads from the `bronze_supply_chain` Delta table.
+- **Operations**:
+  - **Type Casting**: Converts text-based date fields (`order_date`, `shipping_date`) to standard PySpark `Timestamp` formats.
+  - **Pruning**: Drops columns irrelevant to supply chain KPI reporting (e.g., internal metadata fields, repeated strings).
+  - **Data Quality Assertions**:
+    - Validates row counts match Bronze (180,519).
+    - Checks that `order_item_id` contains no duplicates (uniqueness audit).
+    - Flags or filters invalid/null dates.
+    - Validates quantity values (ensures `quantity > 0`).
+- **Storage**: Writes clean, structured records to the Delta table `silver_supply_chain`.
+
+### 3. Gold Layer (Dimensional Modeling)
+- **Source**: Reads from the `silver_supply_chain` Delta table.
+- **Operations**: Separates the unified transaction log into logical Dimensions and a centralized Fact Table to establish a **Star Schema** optimized for analytical aggregates.
+
+#### Dimensions
+- **`dim_customer`**: Houses customer demographic and segment data.
+- **`dim_product`**: Contains catalog information including product category, name, price, and departments.
+- **`dim_date`**: Time dimension extracted from order timestamps to support time-series reporting.
+- **`dim_shipping`**: Stores discrete delivery statuses and shipping methods.
+
+#### Fact Table
+- **`fact_orders`**: Captures operational transactions, linking dimensions via foreign keys and hosting numeric metrics (revenue, discount rates, margins, shipping delays).
+
+---
+
+## 📐 Data Modeling & Star Schema
+
+### Dimension & Fact Table Schemas
 
 #### 👥 dim_customer
-* **Description**: Holds clean customer records.
-* **Columns**: `customer_id` (PK), `customer_fname`, `customer_lname`, `customer_city`, `customer_state`, `customer_country`, `customer_zipcode`, `customer_segment`
+| Column Name | Data Type | Key Type | Description |
+| :--- | :--- | :---: | :--- |
+| `customer_id` | `BIGINT` | PK | Unique identifier for a customer |
+| `customer_fname` | `STRING` | - | Customer's first name |
+| `customer_lname` | `STRING` | - | Customer's last name |
+| `customer_city` | `STRING` | - | City of residence |
+| `customer_state` | `STRING` | - | State of residence |
+| `customer_country` | `STRING` | - | Country of residence |
+| `customer_zipcode` | `STRING` | - | Postal code |
+| `customer_segment` | `STRING` | - | Segment classification (Consumer, Corporate, etc.) |
 
 #### 📦 dim_product
-* **Description**: Holds the inventory product catalog.
-* **Columns**: `product_card_id` (PK), `product_category_id`, `product_name`, `product_price`, `category_name`, `department_name`
+| Column Name | Data Type | Key Type | Description |
+| :--- | :--- | :---: | :--- |
+| `product_card_id` | `BIGINT` | PK | Unique identifier for a product card |
+| `product_category_id`| `BIGINT` | - | Unique category identifier |
+| `product_name` | `STRING` | - | Name of the product |
+| `product_price` | `DOUBLE` | - | Unit price of the product |
+| `category_name` | `STRING` | - | Category description |
+| `department_name` | `STRING` | - | Department associated with the product |
 
 #### 📅 dim_date
-* **Description**: A generated calendar dimension to support time-series reporting.
-* **Columns**: `date` (PK), `year`, `quarter`, `month`, `month_name`, `day`, `day_name`
+| Column Name | Data Type | Key Type | Description |
+| :--- | :--- | :---: | :--- |
+| `date` | `DATE` | PK | The calendar date |
+| `year` | `INT` | - | Calendar year (e.g., 2026) |
+| `quarter` | `INT` | - | Quarter of year (1-4) |
+| `month` | `INT` | - | Numeric month (1-12) |
+| `month_name` | `STRING` | - | Textual month (e.g., August) |
+| `day` | `INT` | - | Day of the month |
+| `day_name` | `STRING` | - | Day of the week (e.g., Saturday) |
 
 #### 🚚 dim_shipping
-* **Description**: Captures combinations of shipping modes and delivery status.
-* **Columns**: `shipping_mode` (PK), `delivery_status` (PK)
-
-### Fact Table
+| Column Name | Data Type | Key Type | Description |
+| :--- | :--- | :---: | :--- |
+| `shipping_mode` | `STRING` | PK | Mode of transport (Standard, First Class, etc.) |
+| `delivery_status` | `STRING` | PK | Delivery status (Late, On Time, Shipping Cancelled) |
 
 #### 🛒 fact_orders
-* **Description**: Stores transactional order items and physical metrics.
-* **Measures**:
-  - `Sales` (sales revenue)
-  - `Quantity` (order item quantity)
-  - `Profit` (profit per order)
-  - `Discount` (item discount value)
-  - `Discount Rate` (item discount rate percentage)
-  - `Benefit per Order` (order margin benefits)
-  - `Shipping Days` (days for shipping real and scheduled)
-  - `Late Delivery Risk` (flag identifying delayed delivery risk)
+| Column Name | Data Type | Key Type | Description |
+| :--- | :--- | :---: | :--- |
+| `order_item_id` | `BIGINT` | PK / Transaction Key | Transactional order item identifier |
+| `order_id` | `BIGINT` | Transaction Key | Unified order identifier |
+| `customer_id` | `BIGINT` | FK | Links to `dim_customer` |
+| `product_card_id` | `BIGINT` | FK | Links to `dim_product` |
+| `order_date` | `DATE` | FK | Links to `dim_date` |
+| `shipping_mode` | `STRING` | FK | Links to `dim_shipping` |
+| `delivery_status` | `STRING` | FK | Links to `dim_shipping` |
+| `sales` | `DOUBLE` | Measure | Total sales revenue |
+| `order_item_quantity`| `INT` | Measure | Number of items purchased |
+| `order_item_total` | `DOUBLE` | Measure | Final transaction price (post-discount) |
+| `order_item_discount`| `DOUBLE` | Measure | Discount amount applied |
+| `order_item_discount_rate`| `DOUBLE` | Measure | Applied discount rate percentage |
+| `order_profit_per_order`| `DOUBLE` | Measure | Calculated profit margin |
+| `benefit_per_order` | `DOUBLE` | Measure | Estimated order benefits |
+| `days_for_shipping_real`| `INT` | Measure | Actual shipping days taken |
+| `days_for_shipment_scheduled`| `INT`| Measure | Scheduled shipping duration standard |
+| `late_delivery_risk` | `INT` | Measure | Flag (0/1) showing risk of late delivery |
 
 ---
 
-## 9. Star Schema
+## 🔍 Data Validation Report
 
-The Star Schema separates descriptive context from performance measurements. This modeling approach enables efficient joins and is highly optimized for Business Intelligence dashboards (e.g. Power BI or Tableau) and analytical aggregates (e.g. SQL group-by operations).
+To verify the integrity and accuracy of the pipeline, data quality assertions are executed post-load. The metrics collected prove perfect consistency:
 
-The relationships between the tables are structured as follows:
+| Metric Type | Audit Target | Expected Value | Actual Value | Status |
+| :--- | :--- | :---: | :---: | :---: |
+| **Row Count Consistency** | Bronze $\rightarrow$ Silver $\rightarrow$ Fact | `180,519` | `180,519` |  Passing |
+| **Entity Integrity** | Unique Customers | `20,652` | `20,652` |  Passing |
+| **Catalog Scope** | Unique Products | `118` | `118` |  Passing |
+| **Logistics Permutations**| Shipping Mode + Status Combos | `12` | `12` |  Passing |
+| **Time Horizon** | Date Dimension Rows | `1,127` | `1,127` |  Passing |
+| **Uniqueness Constraints**| Duplicate `order_item_id` | `0` | `0` |  Passing |
+| **Data Quality Check** | Invalid Date Counts | `0` | `0` |  Passing |
+| **Data Quality Check** | Order Item Quantity $\le 0$ | `0` | `0` |  Passing |
+
+---
+
+## 📐 Architecture Diagram (Mermaid)
+
+The following diagram illustrates the flow of data through the Medallion Architecture:
+
+```mermaid
+graph TD
+    classDef source fill:#F5F5F7,stroke:#333,stroke-width:1.5px,color:#000;
+    classDef bronze fill:#CD7F32,stroke:#333,stroke-width:1.5px,color:#fff;
+    classDef silver fill:#C0C0C0,stroke:#333,stroke-width:1.5px,color:#000;
+    classDef gold fill:#FFD700,stroke:#333,stroke-width:1.5px,color:#000;
+
+    CSV[Raw CSV File]:::source --> B[Bronze Layer <br> bronze_supply_chain]:::bronze
+    B --> S[Silver Layer <br> silver_supply_chain]:::silver
+    S --> G[Gold Layer]:::gold
+    
+    G --> D1[dim_customer]:::gold
+    G --> D2[dim_product]:::gold
+    G --> D3[dim_date]:::gold
+    G --> D4[dim_shipping]:::gold
+    
+    D1 --> F[fact_orders]:::gold
+    D2 --> F
+    D3 --> F
+    D4 --> F
+```
+
+
+---
+
+## 📈 Star Schema Diagram (Mermaid)
+
+The entity relationships inside the Gold Layer are structured as a Star Schema:
 
 ```mermaid
 erDiagram
@@ -206,118 +314,115 @@ erDiagram
 
 ---
 
-## 10. Data Validation
+## 🚀 Challenges Faced & Resolution
 
-To guarantee structural consistency and compliance with schema layouts, automated data audits verify the tables at runtime:
+### 1. Special Characters & Spaces in CSV Headers
+* **Challenge**: The raw CSV dataset contained spaces and special characters in header column names (e.g., `Product Card Id`, `Days for shipping (real)`). Spark Delta tables do not support spaces or special characters in column names in older versions, and they make SQL operations cumbersome.
+* **Resolution**: Implemented a PySpark function to dynamically format all columns, converting spaces to underscores, stripping out brackets, and converting headers to lowercase (e.g., `Days for shipping (real)` $\rightarrow$ `days_for_shipping_real`).
 
-| Validation Step | Rule Performed | Expected Metric | Status |
-| :--- | :--- | :---: | :---: |
-| **Row Count Validation** | Compare Bronze, Silver, and Fact records | `180,519` |  Passed |
-| **Duplicate Validation** | Verify `order_item_id` uniqueness | `0` duplicates |  Passed |
-| **Date Validation** | Audit parsed order date format limits | `0` null dates |  Passed |
-| **Quantity Validation**| Ensure `order_item_quantity` is valid | `> 0` |  Passed |
-| **Schema Validation** | Assert columns conform to expected definitions | Complete Match |  Passed |
+### 2. Multi-Format Date Columns
+* **Challenge**: Date fields in the source files contained text entries with inconsistent formatting (e.g., `MM/dd/yyyy HH:mm` vs `yyyy-MM-dd HH:mm:ss`), causing parsing errors during direct cast.
+* **Resolution**: Used PySpark's `to_timestamp()` with specific date-format patterns combined with fallback logic using `coalesce()` to guarantee robust date parsing.
 
----
-
-## 11. Project Workflow
-
-The following execution flow outlines the data journey:
-
-1. **Volume Landing**: Raw CSV data is uploaded to a Unity Catalog Volume.
-2. **Bronze Run**: CSV file is read, schema is inferred, spaces in headers are standardizerd, and the raw dataset is saved to a Bronze Delta table.
-3. **Silver Cleanse**: The Bronze Delta table is read, string columns for dates are parsed into `Timestamp` datatypes, irrelevant metadata columns are dropped, row count validations are executed, and data is saved to a Silver Delta table.
-4. **Gold Modeller**: Dimensions and Fact datasets are derived from the Silver Delta table and written to their respective Gold Delta tables, establishing the analytical Star Schema.
+### 3. Enforcing Quality Checks (Data Contracts)
+* **Challenge**: Databricks Lakehouse uses Delta tables which traditionally did not enforce constraints (like non-null, primary key uniqueness) natively at write time.
+* **Resolution**: Configured data quality audits inside the notebooks that calculate duplicate rates and null percentages. They raise exceptions using `raise Exception()` if validation criteria are breached, halting the orchestration flow and preventing downstream pollution.
 
 ---
 
-## 12. Project Statistics
+## 💡 Key Learnings
 
-* **Total Records Processed**: `180,519`
-* **Unique Customers**: `20,652`
-* **Unique Catalog Products**: `118`
-* **Shipping Combinations**: `12`
-* **Calendar Date Dimension Range**: `1,127 dates`
-
----
-
-## 13. Folder Structure
-
-```directory
-supply-chain-control-tower-databricks/
-├── notebooks/
-│   ├── 01_bronze_ingestion.py         # Bronze layer loading & naming standardization
-│   ├── 02_silver_transformation.py    # Silver layer cleansing, casting & data audits
-│   └── 03_gold_modeling.py            # Gold layer dimensional and fact modeling
-├── schemas/
-│   ├── bronze_schema.py               # Predefined Spark schemas for ingestion
-│   └── gold_schema.sql                # SQL definitions for Star Schema
-├── LICENSE                            # MIT License details
-└── README.md                          # Project Documentation
-```
+- **Unity Catalog Governance**: Learned how to configure and utilize external locations, schemas, and catalogs, securing read/write access.
+- **Delta Lake Optimization**: Understood how features like Z-Order partitioning (on keys like `order_date`) and file compaction (`OPTIMIZE`) dramatically speed up analytics query runtimes.
+- **Medallion Pattern Separation**: Realized how cleanly separating raw storage, cleansed transformations, and business dimensions simplifies maintenance and debugging.
+- **PySpark Scalability**: Gained experience utilizing distributed DataFrames for massive parallel aggregations instead of memory-heavy local pandas constructs.
 
 ---
 
-## 14. Future Improvements
+## 🔮 Future Improvements
 
-* **Auto Loader Integration**: Convert notebooks to utilize Databricks Auto Loader (`readStream`) to detect and ingest new CSV files landing on UC Volumes incrementally.
-* **Orchestration**: Schedule notebook pipelines using **Databricks Workflows** or Apache Airflow, enabling error alerting.
-* **Data Quality Framework**: Introduce **Delta Live Tables (DLT)** expectations to clean and quarantine low-quality records.
-
----
-
-## 15. Screenshots (placeholder)
-
-*Insert your workspace snapshots here:*
-
-#### Databricks Job Run Graph
-![Workspace Notebook Runs](https://via.placeholder.com/800x400.png?text=Databricks+Job+Orchestration+Graph)
-*Placeholder: Databricks Job Run dashboard displaying successful Bronze, Silver, and Gold execution stages.*
-
-#### Catalog Explorer View
-![Unity Catalog Tables Hierarchy](https://via.placeholder.com/800x400.png?text=Unity+Catalog+Tables+Hierarchy)
-*Placeholder: Databricks Catalog Explorer screen displaying the Gold tables under the Unity Catalog Schema.*
+- [ ] **Streaming Ingestion**: Convert ingestion notebooks to use **Databricks Auto Loader** (`readStream`) for automatic, incremental data detection as soon as new files hit the Volume.
+- [ ] **Data Quality Framework**: Transition manual audits to **Delta Live Tables (DLT)** using Expectation declarations to gracefully quarantine bad records.
+- [ ] **Orchestration**: Configure **Databricks Workflows** to manage notebook executions, schedule cron tasks, and send automated email alerts on failures.
+- [ ] **BI Dashboard Integration**: Provision a Databricks SQL Serverless Warehouse to host live visualizations displaying delivery delay risks and sales indicators.
 
 ---
 
-## 16. How to Run
+## 🏁 How to Run the Project
 
-1. **Unity Catalog Storage Setup**:
-   Create a Catalog (e.g. `supply_chain_dev`), a Schema (e.g. `control_tower`), and an Ingestion Volume (e.g. `raw`) in your Databricks Workspace.
+### Prerequisites
+1. **Databricks Workspace**: Access to a Databricks workspace governed by Unity Catalog.
+2. **Cluster**: A cluster configured with DBR 14.3 LTS or higher.
+3. **Storage Access**: Privileges to create tables in a Catalog and Upload data to a Volume.
+
+### Execution Steps
+1. **Prepare Directories**:
+   Create a Catalog (`supply_chain_dev`) and a Schema (`control_tower`) in your Databricks Catalog Explorer. Create a volume under this schema named `raw`.
 2. **Upload CSV**:
-   Upload the raw CSV dataset into the Catalog Volume path `/Volumes/supply_chain_dev/control_tower/raw/`.
-3. **Workspace Import**:
-   Import this git repository directly into your Databricks Workspace Repos.
-4. **Pipeline Execution**:
-   - Run the notebook `notebooks/01_bronze_ingestion.py` to create the table `bronze_supply_chain`.
-   - Run the notebook `notebooks/02_silver_transformation.py` to cleanse and compile the table `silver_supply_chain`.
-   - Run the notebook `notebooks/03_gold_modeling.py` to generate the Gold Dimensions and Fact tables.
+   Upload your raw supply chain CSV to the `/Volumes/supply_chain_dev/control_tower/raw/` path.
+3. **Import Notebooks**:
+   Clone this repository into your Databricks Workspace Repos:
+   `Workspace` $\rightarrow$ `Repos` $\rightarrow$ `Add Repo` $\rightarrow$ Paste git URL.
+4. **Run Ingestion**:
+   Execute the `01_bronze_ingestion.py` notebook. This reads the CSV, validates row counts, formats names, and saves `bronze_supply_chain`.
+5. **Run Cleaning**:
+   Execute the `02_silver_transformation.py` notebook. This applies type casts, audits columns, and saves `silver_supply_chain`.
+6. **Run Modeling**:
+   Execute the `03_gold_modeling.py` notebook. This splits data into the star schema tables (`dim_customer`, `dim_product`, `dim_date`, `dim_shipping`, and `fact_orders`).
 
 ---
 
-## 17. Key Learnings
+## 🖼️ Project Screenshots
 
-* **Medallion Architecture benefits**: Gained experience in structural separation between raw landing files, cleaned datasets, and optimized tables.
-* **Schema Enforcement**: Understood how Delta Lake guarantees strict validation checks on data write.
-* **Delta Lake Operations**: Learned how optimization commands (like `OPTIMIZE` and Z-Ordering) impact query retrieval speeds.
-* **Unity Catalog Governance**: Explored the security structure of catalogs, schemas, volumes, and table access control lists on Databricks.
+*Here you can insert visual proofs of your pipeline run in Databricks:*
 
----
+#### 1. Databricks Workflow Graph
+![Databricks Workflow](https://via.placeholder.com/800x400.png?text=Databricks+Workflow+Job+Run+Success)
+*Placeholder: Screenshot of the Databricks Jobs UI showing clean, green successful notebook runs.*
 
-## 18. Resume Project Description
+#### 2. Unity Catalog Schema Explorer
+![Unity Catalog Explorer](https://via.placeholder.com/800x400.png?text=Unity+Catalog+Tables+Structure)
+*Placeholder: Screenshot of Databricks Catalog Explorer displaying Gold dimensions and fact tables.*
 
-* Copy-pasteable resume summary:
-> **Supply Chain Control Tower | Databricks, PySpark, Delta Lake, Unity Catalog**
-> * Designed and built an end-to-end Medallion Architecture pipeline to ingest and transform **180,000+** raw Supply Chain records.
-> * Standardized schemas and implemented data type transformations using **PySpark** to ingest CSV documents into transactional **Delta Tables**.
-> * Modeled an analytical **Star Schema** (4 dimensions, 1 fact table) hosting operational supply chain KPI indicators like delivery risk and margin profits.
-> * Implemented validation constraints to verify record integrity, duplicates, dates, and order quantity limits.
-> * Utilized **Unity Catalog** for centralized table schemas, external volumes, and data security governance.
+#### 3. Power BI / Databricks SQL Dashboard
+![Control Tower Dashboard](https://via.placeholder.com/800x400.png?text=Supply+Chain+Control+Tower+Dashboard)
+*Placeholder: Visualizing Late Delivery Risk and Product Performance.*
 
 ---
 
-## 19. Author
+## 💬 Interview Q&A (Based on this Project)
 
-* **Name**: Nisha Sorallikar
-* **GitHub**: [@nishasorallikar](https://github.com/nishasorallikar)
-* **LinkedIn**: [Nisha Sorallikar](https://linkedin.com/in/your-profile-placeholder)
+### Q1: Why did you choose a Star Schema model over a flat denormalized table in the Gold Layer?
+> **Answer**: Flat denormalized tables lead to massive data redundancy and poor performance when querying aggregated metrics across multiple slices (like sales by customer segment, or count by shipping mode). By splitting the data into dimensions and a central fact table, we minimize storage overhead, simplify BI integration (as tools like Power BI are optimized for Star schemas), and accelerate aggregate query performance using Spark's partition pruning.
+
+### Q2: How does Delta Lake help you ensure data quality compared to writing directly to Parquet files?
+> **Answer**: Delta Lake provides ACID transactions and Schema Enforcement. If a Spark job fails halfway while writing to raw Parquet, the files are left in a corrupted state. Delta Lake's transaction log prevents this by ensuring writes either succeed completely or roll back. Additionally, schema enforcement blocks writes if a new field or modified datatype is introduced unexpectedly, shielding downstream reports from silent corruption.
+
+### Q3: How did you handle duplicate data in your pipeline?
+> **Answer**: I evaluated duplicate rates at two phases. In the Bronze stage, I did an exploratory count of duplicate entries. In the Silver notebook, I audited the unique identifier, `order_item_id`. I computed distinct row counts against total row counts; if the difference was greater than zero, the notebook raised an exception to stop execution. In production, we can use a `.dropDuplicates(["order_item_id"])` operation or execute `MERGE INTO` SQL commands to upsert new data without generating duplicates.
+
+---
+
+## 📄 Resume Project Bullet Points
+
+- **Supply Chain Control Tower Pipeline | Databricks, PySpark, Delta Lake, Unity Catalog**
+  - Engineered an end-to-end Medallion Architecture pipeline to ingest and process **180,000+** supply chain transactional records.
+  - Implemented schema standardization and type-casting rules in **PySpark (Spark SQL)**, transforming raw multi-format CSV files into standard **Delta tables**.
+  - Modeled an optimized **Star Schema** (comprising 4 dimensions and a central fact table) to support operational supply chain metrics such as late delivery risk and profit margins.
+  - Set up programmatic data quality checks (null detection, range validations, and uniqueness constraints) preventing downstream pipeline failures.
+  - Leveraged **Unity Catalog** to enforce data governance, directory volumes, and table access controls in a secure Databricks environment.
+
+---
+
+## ✍️ Author
+
+- **Name**: Nisha Sorallikar
+- **GitHub**: [@nishasorallikar](https://github.com/nishasorallikar)
+- **LinkedIn**: [Nisha Sorallikar](https://linkedin.com/in/your-profile-placeholder)
+- **Email**: [nisha.email@example.com](mailto:nisha.email@example.com)
+
+---
+
+## 🪪 License
+
+This project is licensed under the MIT License - see the [LICENSE](file:///c:/Data-Engineering/github_repos/supply-chain-control-tower-databricks/LICENSE) file for details.

@@ -80,12 +80,26 @@ Raw CSV (UC Volume) ──> Bronze (Raw Ingestion) ──> Silver (Enriched & Va
 
 ---
 
-## 📊 Dataset Overview
+## Dataset
 
-The pipeline processes a comprehensive Supply Chain dataset containing transaction logs, logistics updates, and order details. 
-- **Total Records**: `180,519`
-- **Granularity**: Order item level
-- **Key Attributes**: Customer details, Product catalog, Order dates, Shipment dates, Shipping modes, Delivery status, Sales, Discounts, and Profit margins.
+This project uses the **DataCo Supply Chain Dataset**.
+
+### Repository Dataset
+The dataset included in this repository is a **sample version** containing:
+
+- Header row
+- First 100 records
+
+This sample is provided to:
+- Keep the GitHub repository lightweight.
+- Stay within GitHub's file size recommendations.
+- Allow reviewers to understand the dataset schema quickly.
+
+### Full Dataset
+The original dataset contains the complete records (approximately 95 MB) and was used during local development and Databricks processing. Due to its size, it is not included in this repository.
+
+To use the full dataset, download it from the original source and place it in:
+`datasets/DataCoSupplyChainDataset.csv`
 
 ---
 

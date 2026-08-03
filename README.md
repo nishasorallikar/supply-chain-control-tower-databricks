@@ -56,16 +56,7 @@ Raw CSV (UC Volume) ──> Bronze (Raw Ingestion) ──> Silver (Enriched & Va
 
 ---
 
-## 🎯 Project Objectives
 
-- **Automated Ingestion**: Seamlessly ingest raw transactional CSV data from Databricks Unity Catalog Volumes.
-- **ACID Transactions & Schema Enforcement**: Utilize Delta Lake features to ensure data integrity and track historical updates.
-- **Medallion Architecture**: Implement a structured multi-layer approach (Bronze, Silver, Gold) to isolate processing concerns.
-- **Enterprise Governance**: Govern all datasets (Catalogs, Schemas, Tables, Volumes) using **Unity Catalog**.
-- **Analytical Optimization**: Model data into a high-performance **Star Schema** consisting of dimensions and a fact table, reducing join complexity for downstream BI dashboards.
-- **Quality Assurance**: Implement automated data quality checks and validation metrics at each transformation stage.
-
----
 
 ## 🛠️ Tech Stack & Architecture
 
@@ -365,14 +356,7 @@ For a detailed breakdown of the fact and dimension table schemas, see the [Star 
 
 ---
 
-## 💡 Key Learnings
 
-- **Unity Catalog Governance**: Learned how to configure and utilize external locations, schemas, and catalogs, securing read/write access.
-- **Delta Lake Optimization**: Understood how features like Z-Order partitioning (on keys like `order_date`) and file compaction (`OPTIMIZE`) dramatically speed up analytics query runtimes.
-- **Medallion Pattern Separation**: Realized how cleanly separating raw storage, cleansed transformations, and business dimensions simplifies maintenance and debugging.
-- **PySpark Scalability**: Gained experience utilizing distributed DataFrames for massive parallel aggregations instead of memory-heavy local pandas constructs.
-
----
 
 ## 🏁 How to Run the Project
 

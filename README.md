@@ -398,12 +398,12 @@ For a detailed breakdown of the fact and dimension table schemas, see the [Star 
 
 ---
 
-## ✍️ Author
+## 🌟 About Me
 
-- **Name**: Nisha Sorallikar
-- **GitHub**: [@nishasorallikar](https://github.com/nishasorallikar)
-- **LinkedIn**: [Nisha Sorallikar](https://linkedin.com/in/your-profile-placeholder)
-- **Email**: [nisha.email@example.com](mailto:nisha.email@example.com)
+### **Nisha Sorallikar**
+*Aspiring Data Engineer*
+
+Passionate about SQL, Python, Data Warehousing, ETL Pipelines, and Data Analytics.
 
 ---
 

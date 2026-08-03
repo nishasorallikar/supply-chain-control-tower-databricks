@@ -108,8 +108,10 @@ supply-chain-control-tower-databricks/
 │   └── gold_layer.ipynb
 │
 ├── assets/
+│   ├── bronze_data_injestion.png
+│   ├── gold_layer.png
 │   ├── medallion_architecture.png
-│   ├── star_schema.jpg
+│   ├── silver_layer.png
 │   └── star_schema_explanation.md
 │
 ├── datasets/

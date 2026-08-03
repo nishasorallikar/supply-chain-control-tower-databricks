@@ -107,31 +107,24 @@ The project directory structure is organized as follows:
 ```directory
 supply-chain-control-tower-databricks/
 │
-├── .github/
-│   └── workflows/
-│       └── databricks_ci_cd.yml
+├── Bronze/
+│   └── 01_bronze_data_ingestion.ipynb
 │
-├── notebooks/
-│   ├── 01_bronze_data_ingestion.py
-│   ├── 02_silver_layer.py
-│   └── 03_gold_layer.py
+├── Silver/
+│   └── 02_silver_layer.ipynb
+│
+├── Gold/
+│   └── gold_layer.ipynb
 │
 ├── assets/
 │   ├── medallion_architecture.png
-│   ├── project_workflow.png
-│   ├── bronze_layer.png
-│   ├── silver_layer.png
-│   ├── gold_layer.png
-│   ├── databricks_tables.png
-│   └── powerbi_dashboard.png
+│   ├── star_schema.jpg
+│   └── star_schema_explanation.md
 │
-├── data/
-│   └── supply_chain_sample.csv
+├── datasets/
+│   └── DataCoSupplyChainDataset_Sample.csv
 │
-├── README.md
-├── LICENSE
-├── .gitignore
-└── requirements.txt
+└── README.md
 ```
 
 
@@ -397,11 +390,11 @@ For a detailed breakdown of the fact and dimension table schemas, see the [Star 
    Clone this repository into your Databricks Workspace Repos:
    `Workspace` $\rightarrow$ `Repos` $\rightarrow$ `Add Repo` $\rightarrow$ Paste git URL.
 4. **Run Ingestion**:
-   Execute the `01_bronze_ingestion.py` notebook. This reads the CSV, validates row counts, formats names, and saves `bronze_supply_chain`.
+   Execute the `01_bronze_data_ingestion.ipynb` notebook under the `Bronze/` directory. This reads the CSV, validates row counts, formats names, and saves `bronze_supply_chain`.
 5. **Run Cleaning**:
-   Execute the `02_silver_transformation.py` notebook. This applies type casts, audits columns, and saves `silver_supply_chain`.
+   Execute the `02_silver_layer.ipynb` notebook under the `Silver/` directory. This applies type casts, audits columns, and saves `silver_supply_chain`.
 6. **Run Modeling**:
-   Execute the `03_gold_modeling.py` notebook. This splits data into the star schema tables (`dim_customer`, `dim_product`, `dim_date`, `dim_shipping`, and `fact_orders`).
+   Execute the `gold_layer.ipynb` notebook under the `Gold/` directory. This splits data into the star schema tables (`dim_customer`, `dim_product`, `dim_date`, `dim_shipping`, and `fact_orders`).
 
 ---
 

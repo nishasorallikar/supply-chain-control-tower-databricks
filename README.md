@@ -82,24 +82,21 @@ Raw CSV (UC Volume) ──> Bronze (Raw Ingestion) ──> Silver (Enriched & Va
 
 ## Dataset
 
-This project uses the **DataCo Supply Chain Dataset**.
+This project is built using the **DataCo Supply Chain Dataset**.
 
-### Repository Dataset
-The dataset included in this repository is a **sample version** containing:
+### 📊 Dataset Volume Details
+* **Full Production Dataset**: The complete project pipeline was developed and validated using **180,519 data rows (records)**.
+* **Repository Sample Dataset**: The file included in this repository (`datasets/DataCoSupplyChainDataset_Sample.csv`) is a **sample version** containing only the **first 100 rows** of the dataset.
 
-- Header row
-- First 100 records
+### 💡 Why a Sample File?
+The sample file is provided to:
+- Keep the GitHub repository lightweight and optimize load times.
+- Ensure the CSV renders cleanly in GitHub's interactive preview grid (which has a 512 KB size limit for table rendering).
+- Allow reviewers to quickly inspect the exact data schema and field structure.
 
-This sample is provided to:
-- Keep the GitHub repository lightweight.
-- Stay within GitHub's file size recommendations.
-- Allow reviewers to understand the dataset schema quickly.
-
-### Full Dataset
-The original dataset contains the complete records (approximately 95 MB) and was used during local development and Databricks processing. Due to its size, it is not included in this repository.
-
-To use the full dataset, download it from the original source and place it in:
-`datasets/DataCoSupplyChainDataset.csv`
+### 📥 Using the Full Dataset
+To run the pipeline with the full **180,519 records**, download the original dataset and place the CSV in the `datasets/` directory:
+- Path: `datasets/DataCoSupplyChainDataset.csv`
 
 ---
 

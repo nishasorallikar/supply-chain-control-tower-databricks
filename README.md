@@ -292,7 +292,67 @@ graph TD
 
 ## 📈 Star Schema Diagram
 
-The entity relationships inside the Gold Layer are structured as a Star Schema. For a detailed breakdown of the fact and dimension table schemas, see the [Star Schema Specifications](assets/star_schema_explanation.md).
+The entity relationships inside the Gold Layer are structured as a Star Schema. Below is the visual entity-relationship diagram (ERD) detailing the schema design:
+
+```mermaid
+erDiagram
+    dim_customer ||--o{ fact_orders : "has"
+    dim_product ||--o{ fact_orders : "includes"
+    dim_date ||--o{ fact_orders : "placed_on"
+    dim_shipping ||--o{ fact_orders : "shipped_with"
+
+    dim_customer {
+        bigint customer_id PK
+        string customer_fname
+        string customer_lname
+        string customer_segment
+        string customer_city
+        string customer_state
+        string customer_country
+        string customer_zipcode
+    }
+
+    dim_product {
+        bigint product_card_id PK
+        bigint product_category_id
+        string product_name
+        double product_price
+        string category_name
+        string department_name
+    }
+
+    dim_date {
+        date date PK
+        int year
+        int quarter
+        int month
+        string month_name
+        int day
+        string day_name
+    }
+
+    dim_shipping {
+        string shipping_mode PK
+        string delivery_status PK
+    }
+
+    fact_orders {
+        bigint order_item_id PK
+        bigint order_id
+        bigint customer_id FK
+        bigint product_card_id FK
+        date order_date FK
+        string shipping_mode FK
+        string delivery_status FK
+        double sales
+        int order_item_quantity
+        double order_item_total
+        double order_profit_per_order
+        int late_delivery_risk
+    }
+```
+
+For a detailed breakdown of the fact and dimension table schemas, see the [Star Schema Specifications](assets/star_schema_explanation.md).
 
 ---
 
